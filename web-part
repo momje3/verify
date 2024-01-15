@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPN Verification</title>
+  <!-- Add your styles or link to a CSS file here -->
+</head>
+<body>
+  <h1>VPN Verification</h1>
+  <script>
+    // Use JavaScript to detect VPN (Example: using WebRTC)
+    const isVPN = new Promise((resolve) => {
+      const test = new RTCPeerConnection();
+      test.createDataChannel('');
+      test.createOffer()
+        .then(offer => test.setLocalDescription(offer))
+        .catch(() => resolve(true))
+        .finally(() => test.close());
+      setTimeout(() => resolve(false), 3000);
+    });
+
+    isVPN.then((result) => {
+      // Communicate the result to the Discord bot
+      fetch('YOUR_BOT_ENDPOINT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isVPN: result }),
+      });
+    });
+  </script>
+  <!-- Add your additional HTML content or scripts here -->
+</body>
+</html>
